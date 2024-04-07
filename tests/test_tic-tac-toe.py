@@ -1,0 +1,31 @@
+import unittest
+from tictactoe import TicTacToe
+
+class TestTicTacToe(unittest.TestCase):
+    def test_winner(self):
+        game = TicTacToe()
+        self.assertEqual(game.winner(), None)
+        game.play(1, 1)
+        game.play(0, 0)
+        game.play(1, 0)
+        game.play(0, 1)
+        game.play(1, 2)
+        self.assertEqual(game.winner(), 'X')
+        game = TicTacToe()
+        game.play(0, 0)
+        game.play(1, 1)
+        game.play(0, 1)
+        game.play(1, 0)
+        game.play(2, 2)
+        game.play(1, 2)
+        self.assertEqual(game.winner(), 'O')
+        game = TicTacToe()
+        game.play(0, 0)
+        game.play(1, 1)
+        game.play(0, 1)
+        game.play(1, 0)
+        game.play(2, 2)
+        game.play(1, 2)
+        game.play(2, 0)
+        game.play(2, 1)
+        self.assertEqual(game.winner(), 'Draw')
