@@ -1,5 +1,5 @@
 import numpy as np
-
+import copy
 
 class Board:
     def __init__(self, horizontal_size = 3, vertical_size = 3):
