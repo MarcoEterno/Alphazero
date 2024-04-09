@@ -29,6 +29,10 @@ class TicTacToe:
         """
         return self.board.check_draw()
     
+    @property
+    def is_over(self):
+        return self.check_winner() != 0 or self.check_draw()
+    
     def get_possible_moves(self):
         """
         Gets all possible moves on the board

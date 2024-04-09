@@ -30,13 +30,14 @@ class MCTS:
         game = copy.deepcopy(node.game) # 
         if game.check_winner() != 0:
             return game.check_winner()
-        winner = self.agent.play_one_game(game)
+        winner = self.agent.play_one_game()
         return winner
         
     def backpropagate(self, node, result):
         while node != None:
             node.update(result)
             node = node.parent
+            result *= -1 # a win for a player in a given node is a loss for the player in the parent node
         self.game.reset()
     
     def do_one_step(self, node):
@@ -52,9 +53,8 @@ class MCTS:
             elif game.check_draw():
                 return 0
             else:
-                new_game = copy.deepcopy(node.game)
-                new_game.make_move(self.agent.get_move(new_game))
-                return self.simulate(TreeNode(new_game))
+                game.make_move(self.agent.get_move())
+                return self.simulate(TreeNode(game))
     
     def find_best_move_with_mcts(self):
         while self.num_simulations > 0:
@@ -62,10 +62,23 @@ class MCTS:
             self.num_simulations -= 1
         
         return self.root.get_best_move()
+    
+    def print_tree(self):
+        def print_node(node, indent):
+            if node is None:
+                return
+            if node.visits != 0:
+                print(f"{' ' * indent}Visits: {node.visits}, Wins: {node.wins}")
+            for child in node.children:
+                print_node(child, indent + 4)
+        
+        print_node(self.root, 0)
 
 if __name__ == "__main__":
-    game = TicTacToe()
-    agent = RandomPlayer()
-    mcts = MCTS(game, agent)
+    board = Board()
+    game = TicTacToe(board)
+    agent = RandomPlayer(game)
+    mcts = MCTS(game, agent, num_simulations=1000)
     best_move = mcts.find_best_move_with_mcts()
     print(best_move)
+    mcts.print_tree()

@@ -17,6 +17,9 @@ class Board:
             self.board[move] = player
         else:
             raise ValueError("Invalid move: a player has already made a move at this position")
+    
+    def is_valid_move(self, move:int):
+        return self.board[move] == 0
         
     def check_winner(self):
         """
