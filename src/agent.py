@@ -1,13 +1,35 @@
 import numpy as np
 from tictactoe import TicTacToe
-
+from mcts import MCTS
 
 class Agent:
     def __init__(self, game):
         self.game = game
+
+class MCTSAgent(Agent):
+    def __init__(self,game, num_simulations=1000):
+        super().__init__(game)
+        self.mcts = MCTS(game, self, num_simulations)
     
-    def get_move(self, game):
-        pass
+    def get_move(self):
+        possible_moves = self.game.get_possible_moves()[0]
+        if len(possible_moves) > 0:
+            return self.mcts.find_best_move_with_mcts()
+        else:
+            # Handle the case when there are no possible moves
+            # You might want to raise an exception or return a special value
+            return None
+    def play_one_game(self):
+        """Agent plays one game of Tic Tac Toe against itself and returns the winner
+        :param game: the game to play
+        :return: the winner of the game
+        """
+        while True:
+            if self.game.check_winner() != 0:
+                return self.game.check_winner()
+            if self.game.check_draw():
+                return 0
+            self.game.make_move(self.get_move())
 
 class RandomPlayer(Agent):
     def __init__(self,game):
