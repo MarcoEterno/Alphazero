@@ -29,7 +29,7 @@ class MCTS:
         if len(node.children) == 0:
             return node
         else:
-            return self.search_leaf(node.get_best_child())
+            return self.search_leaf(node.best_child())
 
     def rollout(self, node):
         """Simulates a random game from the current node to the end and returns the winner
@@ -96,6 +96,7 @@ class MCTS:
 
     def print_tree(self):
         """Prints the tree of moves played by the MCTS algorithm"""
+
         def print_node(node, indent):
             if node is None:
                 return
@@ -118,6 +119,6 @@ if __name__ == "__main__":
     mcts.build_tree(mcts.root)
     mcts.print_tree()
 
-    #BACK OF THE ENVELOPE CALCULATIONS FOR THE NUMBER OF NODES IN THE TREE
+    # BACK OF THE ENVELOPE CALCULATIONS FOR THE NUMBER OF NODES IN THE TREE
     # N_NODES ~= 9!/(5!*4!)/(SIMME>TRIES) = 9*8*7*6/(4*3*2)/SIMMETRIES = 126/SIMMETRIES = 126/8 = 15.75
     # TOTAL_NODES IN BASE ALGORITHM = 9! = 362880

@@ -1,4 +1,3 @@
-from tictactoe import TicTacToe
 from agent import Agent, MCTSAgent
 from tictactoe import TicTacToe
 
