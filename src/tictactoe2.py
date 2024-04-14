@@ -102,7 +102,9 @@ class TicTacToe:
         Prints the current board
         """
         for i in range(self.vertical_size):
-            print(self.board[i * self.horizontal_size:(i + 1) * self.horizontal_size])
+            row = self.board[i * self.horizontal_size:(i + 1) * self.horizontal_size]
+            print(' '.join(str(cell).ljust(2) for cell in row))
+        print("\n")
 
 if __name__ == "__main__":
     game = TicTacToe()

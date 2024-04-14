@@ -1,5 +1,5 @@
-from typing import Optional
 import logging
+from typing import Optional
 
 import numpy as np
 
@@ -8,21 +8,23 @@ from tictactoe2 import TicTacToe
 
 class Node:
     def __init__(self,
-                 game_state : Optional['TicTacToe'] = None,
+                 game_state: Optional['TicTacToe'] = None,
                  parent: Optional['Node'] = None):
         self.parent = parent
         self.children = {}
         self.visits = 0
         self.wins = 0
         self.game_state = game_state if game_state is not None else self.construct_game_state()
+
     def construct_game_state(self):
         if self.parent is None:
             return TicTacToe()
-        #find the key corresponding to the children value that is equal to the current node
+        # find the key corresponding to the children value that is equal to the current node
         for move, child in self.parent.children.items():
             if child == self:
                 new_gamestate = self.parent.game_state.get_updated_game_state(move)
                 return new_gamestate
+
     @property
     def last_move(self):
         return self.game_state.get_last_move()
@@ -30,9 +32,11 @@ class Node:
     def add_child_given_move(self, move: int):
         child = Node(game_state=self.game_state.get_updated_game_state(move), parent=self)
         self.children[move] = child
+
     def update(self, result):
         self.visits += 1
         self.wins += result
+
     @property
     def ucb(self):
         if self.visits == 0:
@@ -40,14 +44,18 @@ class Node:
         if self.parent is None:
             return self.wins / self.visits
         else:
-            return self.wins / self.visits + np.sqrt(2 * np.log(self.parent.visits) / self.visits)
+            return self.wins / self.visits + 2 * np.sqrt(np.log(self.parent.visits) / self.visits)
+
+    @property
+    def average_wins(self):
+        return self.wins / self.visits if self.visits > 0 else 0
 
     def get_best_move_from_possible_children(self):
         """
         Returns the move that leads to the child with the highest UCB value
         :return: best move or None if there are no possible moves
         """
-        #handle the case where there are no possible moves
+        # handle the case where there are no possible moves
         self.add_all_children()
         if len(self.children) == 0:
             logging.info("No possible moves were found")
@@ -79,7 +87,8 @@ class Node:
                 self.add_child_given_move(move)
 
     def __repr__(self):
-        return f"State: {self.game_state.game_history}, Visits: {self.visits}, Wins: {self.wins}, UCB: {self.ucb}"
+        return f"State: {self.game_state.game_history}, Visits: {self.visits}, Wins: {self.wins}, UCB: {round(self.ucb, 3)}"
+
 
 if __name__ == "__main__":
     game = TicTacToe()
