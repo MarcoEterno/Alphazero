@@ -4,13 +4,14 @@ from typing import Optional
 
 import numpy as np
 
+from mcts2 import MCTS
 from tictactoe2 import TicTacToe
 from treenode2 import Node
-from mcts2 import MCTS
+
 
 class Agent:
     @staticmethod
-    def return_winner_match(agent1, agent2, game:TicTacToe = None, print_game:bool = False):
+    def return_winner_match(agent1, agent2, game: TicTacToe = None, print_game: bool = False):
         """
         Plays a game between two agents and returns the winner
         :param agent1: the first agent
@@ -27,7 +28,7 @@ class Agent:
             current_player = 1 - current_player
             if print_game:
                 game.print_board()
-                if(game.is_over):
+                if (game.is_over):
                     print("Winner:", game.return_winner())
         return game.return_winner()
 
@@ -91,6 +92,7 @@ class Agent:
     def get_move(self):
         pass
 
+
 class RandomAgent(Agent):
     def get_move(self, game: Optional[TicTacToe] = None):
         """
@@ -99,6 +101,7 @@ class RandomAgent(Agent):
         :return:
         """
         return self.choose_random_move(game)
+
 
 class MCTSAgent(Agent):
     def __init__(self, game: Optional[TicTacToe] = None, mcts: Optional[MCTS] = None, num_simulations=1000):
@@ -122,6 +125,7 @@ class MCTSAgent(Agent):
         best_move = self.mcts.find_best_move_with_mcts(node=self.mcts.root)
         return best_move
 
+
 class HumanAgent(Agent):
     def get_move(self, game: Optional[TicTacToe] = None):
         """
@@ -133,6 +137,7 @@ class HumanAgent(Agent):
         move = int(input("Enter your move as integer in range [0,8]: "))
         return move
 
+
 if __name__ == "__main__":
     game = TicTacToe()
     mcts = MCTS(game, num_simulations=10000)
@@ -140,4 +145,4 @@ if __name__ == "__main__":
     human_player = HumanAgent(game=game)
     random_player = RandomAgent(game=game)
     print(Agent.play_multiple_matches(mcts_player, random_player, num_games=3, print_game=True))
-    #print(Agent.return_winner_match(mcts_player, random_player, game, print_game=True))
+    # print(Agent.return_winner_match(mcts_player, random_player, game, print_game=True))

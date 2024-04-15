@@ -7,6 +7,25 @@ from tictactoe2 import TicTacToe
 
 
 class Node:
+    def __getstate__(self):
+        # Capture what is normally pickled
+        state = self.__dict__.copy()
+        # You can add custom handling here if needed
+        return state
+
+    def __setstate__(self, state):
+        # Restore state
+        self.__dict__.update(state)
+        # Ensure all attributes are initialized properly
+        if 'children' not in state:
+            self.children = {}
+        if 'visits' not in state:
+            self.visits = 0
+        if 'wins' not in state:
+            self.wins = 0
+        if 'game_state' not in state:
+            self.game_state = self.construct_game_state()
+
     def __init__(self,
                  game_state: Optional['TicTacToe'] = None,
                  parent: Optional['Node'] = None):
@@ -91,20 +110,6 @@ class Node:
                 f"Visits: {self.visits},"
                 f" Wins: {self.wins}, "
                 f"UCB: {round(self.ucb, 3)}")
-
-    def __getstate__(self):
-        # Capture what is normally pickled
-        state = self.__dict__.copy()
-        # You can add custom handling here if needed
-        return state
-
-    def __setstate__(self, state):
-        self.__dict__.update(state)
-        # Ensure all attributes are initialized properly
-        if 'children' not in state or not self.children:  # Reinitialize children if necessary
-            self.children = {}
-            self.add_all_children()  # Assumes add_all_children correctly populates the children based on game state
-
 
 if __name__ == "__main__":
     game = TicTacToe()

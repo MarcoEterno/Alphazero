@@ -1,8 +1,8 @@
 import copy
 import logging
+import math
 import pickle
 from typing import Optional
-import math
 
 import numpy as np
 
@@ -116,20 +116,22 @@ class MCTS:
     def save_mcts(self):
         """Saves the mcts to a file"""
         try:
-            with open(f'mcts_10^{round(math.log10(self.num_simulations),2)}', 'wb') as f:
-                pickle.dump(self, f)
+            with open(f'mcts_10^{round(math.log10(self.num_simulations), 2)}', 'wb') as f:
+                pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
         except Exception as e:
             print(f"Error saving MCTS tree: {e}")
             exit(1)
+
     @timer
-    def load_mcts(self, num_simulations = None):
+    def load_mcts(self, num_simulations=None):
         """Loads the mcts from a file
         :param num_simulations: the number of simulations of the mcts we want to load"""
         num_simulations = int(num_simulations) if num_simulations is not None else self.num_simulations
-        filename = f'mcts_10^{round(math.log10(num_simulations),2)}'
+        filename = f'mcts_10^{round(math.log10(num_simulations), 2)}'
         try:
             with open(filename, 'rb') as f:
                 mcts = pickle.load(f)
+                print(mcts.__dict__)
                 return mcts
 
         except (FileNotFoundError, pickle.UnpicklingError) as e:
@@ -144,18 +146,33 @@ class MCTS:
                 # exit the program if the user does not want to build a new tree
                 exit(0)
 
+    def __getstate__(self):
+        # Return a dictionary representing the object's state
+        state = self.__dict__.copy()
+        return state
+
+    def __setstate__(self, state):
+        # Restore the object's state from the dictionary
+        self.__dict__.update(state)
+
 
 if __name__ == "__main__":
     game = TicTacToe()
     mcts = MCTS(game)
     mcts = mcts.load_mcts(num_simulations=10000)
     print(type(mcts))
-    print(mcts.find_best_move_with_mcts(mcts.root, print_tree=True))
+    print(mcts.find_best_move_with_mcts(mcts.root, print_tree=False))
     print(mcts.root.children)
     mcts.save_mcts()
+    mcts2 = MCTS(TicTacToe())
+    mcts2.load_mcts(num_simulations=10000)
+    print(mcts2.root.children)
+
+    """
+    print(mcts.root.children)
     mcts2 = MCTS(TicTacToe())
     mcts2.load_mcts(int(mcts.num_simulations))
     print(type(mcts2))
     print(mcts2.root.children)
-    print(mcts.root)
     print(sum([child.visits for child in mcts2.root.children.values()]))
+    game = TicTacToe()"""
