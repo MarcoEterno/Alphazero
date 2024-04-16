@@ -99,11 +99,10 @@ class Node:
         return state
 
     def __setstate__(self, state):
+        # Restore state
         self.__dict__.update(state)
         # Ensure all attributes are initialized properly
-        if 'children' not in state or not self.children:  # Reinitialize children if necessary
-            self.children = {}
-            self.add_all_children()  # Assumes add_all_children correctly populates the children based on game state
+
 
 
 if __name__ == "__main__":
