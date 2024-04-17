@@ -3,7 +3,7 @@ from typing import Optional
 
 import numpy as np
 
-from tictactoe2 import TicTacToe
+from tictactoe import TicTacToe
 
 
 class Node:

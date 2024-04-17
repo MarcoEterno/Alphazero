@@ -4,9 +4,9 @@ from typing import Optional
 
 import numpy as np
 
-from mcts2 import MCTS
-from tictactoe2 import TicTacToe
-from treenode2 import Node
+from mcts import MCTS
+from tictactoe import TicTacToe
+from treenode import Node
 from saver import load_mcts, save_mcts
 
 

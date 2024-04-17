@@ -4,8 +4,8 @@ from typing import Optional
 
 import numpy as np
 
-from tictactoe2 import TicTacToe
-from treenode2 import Node
+from tictactoe import TicTacToe
+from treenode import Node
 from utils import timer
 
 

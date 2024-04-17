@@ -2,8 +2,8 @@ import math
 import pickle
 
 from utils import timer
-from mcts2 import MCTS
-from tictactoe2 import TicTacToe
+from mcts import MCTS
+from tictactoe import TicTacToe
 
 """
 This module contains functions to save and load the MCTS tree

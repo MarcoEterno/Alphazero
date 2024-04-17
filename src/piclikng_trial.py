@@ -1,8 +1,8 @@
 import pickle
 
-from mcts2 import MCTS
-from tictactoe2 import TicTacToe
-from treenode2 import Node
+from mcts import MCTS
+from tictactoe import TicTacToe
+from treenode import Node
 
 
 def save_node(node):
