@@ -106,6 +106,17 @@ class TicTacToe:
             print(' '.join(str(cell).ljust(2) for cell in row))
         print("\n")
 
+    def __getstate__(self):
+        # Capture what is normally pickled, specifically handling the numpy array
+        state = self.__dict__.copy()
+        state['board'] = self.board.tolist()  # Convert numpy array to list for serialization
+        return state
+
+    def __setstate__(self, state):
+        # Restore state
+        state['board'] = np.array(state['board'])  # Convert list back to numpy array
+        self.__dict__.update(state)
+
 
 if __name__ == "__main__":
     game = TicTacToe()

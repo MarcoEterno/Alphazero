@@ -1,21 +1,24 @@
 import pickle
-import numpy as np
 
 from mcts2 import MCTS
 from tictactoe2 import TicTacToe
 from treenode2 import Node
 
+
 def save_node(node):
     with open('node.pkl', 'wb') as f:
         pickle.dump(node, f)
+
 
 def load_node():
     with open('node.pkl', 'rb') as f:
         return pickle.load(f)
 
+
 def save_mcts(mcts):
     with open('mcts.pkl', 'wb') as f:
         pickle.dump(mcts, f)
+
 
 def load_mcts():
     with open('mcts.pkl', 'rb') as f:
@@ -39,6 +42,3 @@ if __name__ == '__main__':
     mcts2 = load_mcts()
     print(mcts2.root.children[2].game_state.board)
     print(mcts2.root.children)
-
-
-

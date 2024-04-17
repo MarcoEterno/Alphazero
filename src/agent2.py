@@ -7,11 +7,17 @@ import numpy as np
 from mcts2 import MCTS
 from tictactoe2 import TicTacToe
 from treenode2 import Node
+from saver import load_mcts, save_mcts
 
 
 class Agent:
     @staticmethod
-    def return_winner_match(agent1, agent2, game: TicTacToe = None, print_game: bool = False):
+    def return_winner_match(
+            agent1,
+            agent2,
+            game: TicTacToe = None,
+            print_game: bool = False,
+            print_mcts_move_evals: bool = False):
         """
         Plays a game between two agents and returns the winner
         :param agent1: the first agent
@@ -33,7 +39,12 @@ class Agent:
         return game.return_winner()
 
     @staticmethod
-    def play_multiple_matches(agent1, agent2, num_games: int, print_game: bool = False):
+    def play_multiple_matches(
+            agent1,
+            agent2,
+            num_games: int,
+            print_game: bool = False,
+            print_mcts_move_evals: bool = False):
         """
         Plays multiple games between two agents
         :param agent1: the first agent
@@ -141,6 +152,7 @@ class HumanAgent(Agent):
 if __name__ == "__main__":
     game = TicTacToe()
     mcts = MCTS(game, num_simulations=10000)
+    mcts = load_mcts(mcts, num_simulations=100000)
     mcts_player = MCTSAgent(game=game, mcts=mcts)
     human_player = HumanAgent(game=game)
     random_player = RandomAgent(game=game)

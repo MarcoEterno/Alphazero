@@ -1,7 +1,5 @@
 import copy
 import logging
-import math
-import pickle
 from typing import Optional
 
 import numpy as np
@@ -113,39 +111,6 @@ class MCTS:
         best_move = max(node.children, key=lambda x: node.children[x].average_wins)
         return best_move
 
-    def save_mcts(self):
-        """Saves the mcts to a file"""
-        try:
-            with open(f'mcts_10^{round(math.log10(self.num_simulations), 2)}', 'wb') as f:
-                pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
-        except Exception as e:
-            print(f"Error saving MCTS tree: {e}")
-            exit(1)
-
-    @timer
-    def load_mcts(self, num_simulations=None):
-        """Loads the mcts from a file
-        :param num_simulations: the number of simulations of the mcts we want to load"""
-        num_simulations = int(num_simulations) if num_simulations is not None else self.num_simulations
-        filename = f'mcts_10^{round(math.log10(num_simulations), 2)}'
-        try:
-            with open(filename, 'rb') as f:
-                mcts = pickle.load(f)
-                print(mcts.__dict__)
-                return mcts
-
-        except (FileNotFoundError, pickle.UnpicklingError) as e:
-            print(f"Error loading MCTS tree: {e}")
-            print("Do you want to build a new tree? (y/n): ")
-            answer = input()
-            if answer == "y":
-                mcts = MCTS(TicTacToe(), num_simulations)
-                mcts.build_mcts_tree()
-                return mcts
-            else:
-                # exit the program if the user does not want to build a new tree
-                exit(0)
-
     def __getstate__(self):
         # Return a dictionary representing the object's state
         state = self.__dict__.copy()
@@ -157,15 +122,15 @@ class MCTS:
 
 
 if __name__ == "__main__":
-    game = TicTacToe()
-    mcts = MCTS(game)
-    mcts = mcts.load_mcts(num_simulations=10000)
+    from saver import save_mcts, load_mcts
+    mcts = MCTS(TicTacToe(), num_simulations=1000000)
+    mcts = load_mcts(mcts)
     print(type(mcts))
     print(mcts.find_best_move_with_mcts(mcts.root, print_tree=False))
     print(mcts.root.children)
-    mcts.save_mcts()
-    mcts2 = MCTS(TicTacToe())
-    mcts2.load_mcts(num_simulations=10000)
+    save_mcts(mcts)
+    mcts2 = MCTS(TicTacToe(), num_simulations=1000000)
+    mcts2 = load_mcts(mcts2)
     print(mcts2.root.children)
 
     """

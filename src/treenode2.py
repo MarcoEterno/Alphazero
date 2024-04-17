@@ -104,7 +104,6 @@ class Node:
         # Ensure all attributes are initialized properly
 
 
-
 if __name__ == "__main__":
     game = TicTacToe()
     node = Node(game)
