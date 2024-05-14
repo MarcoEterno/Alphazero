@@ -36,7 +36,9 @@ class Agent:
                 game.print_board()
                 if (game.is_over):
                     print("Winner:", game.return_winner())
-        return game.return_winner()
+        winner = game.return_winner()
+        del game
+        return winner
 
     @staticmethod
     def play_multiple_matches(
@@ -152,7 +154,7 @@ class HumanAgent(Agent):
 if __name__ == "__main__":
     game = TicTacToe()
     mcts = MCTS(game, num_simulations=10000)
-    mcts = load_mcts(mcts, num_simulations=100000)
+    mcts = load_mcts(mcts, num_simulations=10000)
     mcts_player = MCTSAgent(game=game, mcts=mcts)
     human_player = HumanAgent(game=game)
     random_player = RandomAgent(game=game)

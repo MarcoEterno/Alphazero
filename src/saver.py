@@ -40,7 +40,7 @@ def load_mcts(mcts, num_simulations=None):
         answer = input()
         if answer == "y":
             mcts = MCTS(TicTacToe(), num_simulations)
-            mcts.build_mcts_tree()
+            mcts.build_mcts_tree(print_progress=True)
             return mcts
             
         else:

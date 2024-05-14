@@ -75,14 +75,17 @@ class MCTS:
             self.backpropagate(leaf, result)
 
     @timer
-    def build_mcts_tree(self, node: Optional[Node] = None):
+    def build_mcts_tree(self, node: Optional[Node] = None, print_progress: bool = False):
         """
-        Builds the MCTS tree by doing num_simulations steps
+        Builds the MCTS tree until the number of simulations is reached
         :param node: the node to start the tree building from
         """
         node = self.root if node is None else node
-        for _ in range(self.num_simulations):
+        while node.visits < self.num_simulations:
             self.do_one_step(node)
+            if print_progress:
+                # print a progress bar of the tree building
+                print(f"\r{node.visits}/{self.num_simulations}", end="")
 
     def print_tree(self, node: Optional[Node] = None):
         """Prints the tree of moves played by the MCTS algorithm"""
@@ -107,7 +110,6 @@ class MCTS:
         self.build_mcts_tree(node)
         if print_tree:
             self.print_tree(node)
-
         best_move = max(node.children, key=lambda x: node.children[x].average_wins)
         return best_move
 
